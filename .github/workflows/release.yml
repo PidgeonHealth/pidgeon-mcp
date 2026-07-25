@@ -61,18 +61,30 @@ jobs:
             [[ "$GITHUB_REF_TYPE" == "tag" && "$GITHUB_REF_NAME" == "v0.1.0-beta.1" ]] || {
               echo '::error::Publication and tagged staging require protected v0.1.0-beta.1.'; exit 1;
             }
-            ref_json="$(gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$GITHUB_REF_NAME")"
-            [[ "$(jq -r '.object.type' <<<"$ref_json")" == "tag" ]] || {
-              echo '::error::The release ref must be an annotated signed tag, not a lightweight tag.'; exit 1;
-            }
-            tag_sha="$(jq -r '.object.sha' <<<"$ref_json")"
-            tag_json="$(gh api "repos/$GITHUB_REPOSITORY/git/tags/$tag_sha")"
-            [[ "$(jq -r '.verification.verified' <<<"$tag_json")" == "true" ]] || {
-              echo '::error::The release tag must be GitHub-verified.'; exit 1;
-            }
-            [[ "$(jq -r '.object.sha' <<<"$tag_json")" == "$GITHUB_SHA" ]] || {
-              echo '::error::The verified tag must point directly at the workflow commit.'; exit 1;
-            }
+                ref_json="$(curl --fail-with-body --silent --show-error \
+                  --header 'Accept: application/vnd.github+json' \
+                  --header "Authorization: Bearer $GH_TOKEN" \
+                  --header 'X-GitHub-Api-Version: 2022-11-28' \
+                  "https://api.github.com/repos/$GITHUB_REPOSITORY/git/ref/tags/$GITHUB_REF_NAME")"
+                tag_type="$(jq -r '.object.type' <<<"$ref_json")"
+                tag_sha="$(jq -r '.object.sha' <<<"$ref_json")"
+                if [[ "$tag_type" != "tag" ]]; then
+                  echo '::error::The release ref must be an annotated signed tag, not a lightweight tag.'
+                  exit 1
+                fi
+                tag_json="$(curl --fail-with-body --silent --show-error \
+                  --header 'Accept: application/vnd.github+json' \
+                  --header "Authorization: Bearer $GH_TOKEN" \
+                  --header 'X-GitHub-Api-Version: 2022-11-28' \
+                  "https://api.github.com/repos/$GITHUB_REPOSITORY/git/tags/$tag_sha")"
+                if [[ "$(jq -r '.verification.verified' <<<"$tag_json")" != "true" ]]; then
+                  echo '::error::The release tag must be GitHub-verified.'
+                  exit 1
+                fi
+                if [[ "$(jq -r '.object.sha' <<<"$tag_json")" != "$GITHUB_SHA" ]]; then
+                  echo '::error::The verified tag must point directly at the workflow commit.'
+                  exit 1
+                fi
           fi
 
           if [[ "$DRY_RUN" == "false" ]]; then
@@ -170,7 +182,7 @@ jobs:
           jq . artifacts/candidate/candidate.json
 
       - name: Upload sealed MCP candidate
-        uses: actions/upload-artifact@043fb1d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: pidgeon-mcp-candidate-${{ github.run_id }}
           path: artifacts/candidate

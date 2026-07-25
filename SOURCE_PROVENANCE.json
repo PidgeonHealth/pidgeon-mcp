@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "surface": "mcp",
   "targetRepository": "PidgeonHealth/pidgeon-mcp",
-  "upstreamSha": "a7244dd113753064267b201dd03a80080b1a19c8",
+  "upstreamSha": "03e24c0489b87f01d9d754705c586c6ee33c34d3",
   "sourceRef": "origin/main",
   "manifestSha256": "608f5ae6e540828934d66052ead75ff8f681e5a97ab585e66e85f4359213583c",
   "projectorPath": "scripts/public-release/project.mjs",
@@ -69,8 +69,8 @@
     },
     {
       "path": ".github/workflows/release.yml",
-      "sha256": "5c7ac3744877d58ab772c671bf030219dcc6ead311270fe6372646c534ad4278",
-      "size": 11172,
+      "sha256": "b07043a2c32554a5cbcb2954f49499f035dd7c72467bfff732ec96724446fe0a",
+      "size": 11869,
       "mode": "100644",
       "source": "config/public-ci-templates/per-target/mcp/release.yml",
       "license": "Pidgeon-Public-Documentation"
