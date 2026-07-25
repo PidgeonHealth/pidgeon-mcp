@@ -1,0 +1,7 @@
+# Generated MCP manifest artifacts — emitted with LF by `npm run manifest`. Pin
+# LF on disk (regardless of core.autocrlf) so the drift guard in
+# test/manifest.test.ts is byte-identical on every platform; otherwise a Windows
+# checkout would store CRLF and the guard would fail against the LF generator output.
+manifest.json text eol=lf
+MANIFEST.md text eol=lf
+bundle/manifest.json text eol=lf

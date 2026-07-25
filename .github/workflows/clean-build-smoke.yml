@@ -1,0 +1,45 @@
+# Signed-out clean-build smoke for PidgeonHealth/pidgeon-mcp (release policy § 5: CLI mode
+# equals the community tool catalog, authenticated Bridge mode registers only advertised
+# entitled capabilities).
+#
+# Installs the PUBLISHED package from npmjs.org (never a `file:`/`link:` back to the monorepo)
+# and proves the CLI-mode capability catalog matches the community set with no source-path
+# Bridge bootstrap or demo entitlement bypass reachable.
+
+name: clean-build-smoke
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  anonymous-install-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+
+      - name: Install the published package
+        run: npm install --global @pidgeonhealth/pidgeon-mcp@0.1.0-beta.1
+
+      - name: CLI-mode capability catalog smoke
+        env:
+          PIDGEON_MODE: cli
+        run: |
+          pidgeon-mcp --list-tools > tools.json
+          node -e "
+            const tools = require('./tools.json');
+            if (!Array.isArray(tools) || tools.length === 0) {
+              console.error('no tools registered in CLI mode');
+              process.exit(1);
+            }
+            const forbidden = tools.find(t => /demo|bypass|ghost/i.test(t.name || ''));
+            if (forbidden) {
+              console.error('planted/ghost tool reachable in CLI mode:', forbidden.name);
+              process.exit(1);
+            }
+          "

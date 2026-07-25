@@ -1,0 +1,8 @@
+[
+  { "alias": "pro", "tier": "pro" },
+  { "alias": "trial", "tier": "pro" },
+  { "alias": "professional", "tier": "pro" },
+  { "alias": "enterprise", "tier": "enterprise" },
+  { "alias": "free", "tier": "free" },
+  { "alias": "consolefree", "tier": "free" }
+]

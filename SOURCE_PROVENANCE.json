@@ -1,0 +1,847 @@
+{
+  "schemaVersion": 1,
+  "surface": "mcp",
+  "targetRepository": "PidgeonHealth/pidgeon-mcp",
+  "upstreamSha": "a7244dd113753064267b201dd03a80080b1a19c8",
+  "sourceRef": "origin/main",
+  "manifestSha256": "608f5ae6e540828934d66052ead75ff8f681e5a97ab585e66e85f4359213583c",
+  "projectorPath": "scripts/public-release/project.mjs",
+  "projectorSha256": "f45498479728274e9a1e844bd83ca25a05c35b17c487e0544ffbfd2e10c942b8",
+  "compositionManifestPath": "config/public-compositions/mcp.yaml",
+  "compositionManifestSha256": "1f7d88638f85abff116e21ac92bb10f45576a2deed5f86b31323541f7d8a82ad",
+  "secretScanner": "pidgeon-public-projection-v1",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "sha256": "6af30b1baae4dd6ab09717488548cb8f9466ad5c36a98856a2bb39968f417930",
+      "size": 397,
+      "mode": "100644",
+      "source": "pidgeon-mcp/.gitattributes",
+      "license": "Pidgeon-Public-Documentation"
+    },
+    {
+      "path": ".github/CODEOWNERS",
+      "sha256": "64385535293e597d886448969925be6f20ff78c3348fca32604330e71291fe0f",
+      "size": 91,
+      "mode": "100644",
+      "source": "config/public-ci-templates/per-target/mcp/CODEOWNERS",
+      "license": "Pidgeon-Public-Documentation"
+    },
+    {
+      "path": ".github/dependabot.yml",
+      "sha256": "a28054632924262fa0021f026f1afdd23e24a4b072afa89c904e9de9fc068ce8",
+      "size": 529,
+      "mode": "100644",
+      "source": "config/public-ci-templates/per-target/mcp/dependabot.yml",
+      "license": "Pidgeon-Public-Documentation"
+    },
+    {
+      "path": ".github/workflows/bootstrap.yml",
+      "sha256": "2a811bd764ab5daa82dc4a3d5b8ed11dcb66a5e81986fc955fb3f056a5165665",
+      "size": 4278,
+      "mode": "100644",
+      "source": "config/public-ci-templates/per-target/mcp/bootstrap.yml",
+      "license": "Pidgeon-Public-Documentation"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "1e7a1b36e8d200a3e5aa770cc4df18257b5ea58e2c0277e2754938285054ff17",
+      "size": 1004,
+      "mode": "100644",
+      "source": "config/public-ci-templates/per-target/mcp/ci.yml",
+      "license": "Pidgeon-Public-Documentation"
+    },
+    {
+      "path": ".github/workflows/clean-build-smoke.yml",
+      "sha256": "1a535b04cfa66f6653392ad60186cac9cc62e8496d8419f628879d6acf68978d",
+      "size": 1536,
+      "mode": "100644",
+      "source": "config/public-ci-templates/per-target/mcp/clean-build-smoke.yml",
+      "license": "Pidgeon-Public-Documentation"
+    },
+    {
+      "path": ".github/workflows/codeql.yml",
+      "sha256": "8a9bab4ed09d13c62ea889498d35a2ea65826ad9bda2cca8793a0bcfea7a8123",
+      "size": 852,
+      "mode": "100644",
+      "source": "config/public-ci-templates/per-target/mcp/codeql.yml",
+      "license": "Pidgeon-Public-Documentation"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "sha256": "5c7ac3744877d58ab772c671bf030219dcc6ead311270fe6372646c534ad4278",
+      "size": 11172,
+      "mode": "100644",
+      "source": "config/public-ci-templates/per-target/mcp/release.yml",
+      "license": "Pidgeon-Public-Documentation"
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "507c7a9c5efda3e97953c61adb8218643012ca5a5d56af8b63f36b9bc9e9b6b4",
+      "size": 45,
+      "mode": "100644",
+      "source": "pidgeon-mcp/.gitignore",
+      "license": "Pidgeon-Public-Documentation"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "sha256": "1d0b18e31952f4896f892fe001ed68cffbc5a2eb9395fe114c3fedee08b2b5bc",
+      "size": 1507,
+      "mode": "100644",
+      "source": "config/public-projections/scaffold/shared/CONTRIBUTING.md",
+      "license": "Pidgeon-Public-Documentation"
+    },
+    {
+      "path": "DCO",
+      "sha256": "f7ac75b443f4ca16b503241344b41aeff9503b0c30bedc2b119551d83cb0fa90",
+      "size": 1366,
+      "mode": "100644",
+      "source": "config/public-projections/scaffold/shared/DCO",
+      "license": "Pidgeon-Public-Documentation"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "fd590ce7c5df3e6a1f38481cfc0c244b3a192c8a4c79fd7cf95676ef2c81cf34",
+      "size": 14848,
+      "mode": "100644",
+      "source": "config/public-projections/scaffold/shared/LICENSE",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "MANIFEST.md",
+      "sha256": "eaf6fee86643aaf6d63ff597345069b2bc67deb19b1aedc64be8ab22303fee68",
+      "size": 41850,
+      "mode": "100644",
+      "source": "pidgeon-mcp/MANIFEST.md",
+      "license": "Pidgeon-Public-Documentation"
+    },
+    {
+      "path": "NOTICE.md",
+      "sha256": "41607e809b218caab8f1318a3e7d6d4db269acb85cec5d14f76dce7afd163aa3",
+      "size": 1178,
+      "mode": "100644",
+      "source": "config/public-projections/scaffold/shared/NOTICE.md",
+      "license": "Pidgeon-Public-Documentation"
+    },
+    {
+      "path": "README.md",
+      "sha256": "14e0a8772b5df7ef3f75fae7b338dc719089af9a8b2ba17d81a2b19182d638c8",
+      "size": 1733,
+      "mode": "100644",
+      "source": "config/public-projections/scaffold/mcp/README.md",
+      "license": "Pidgeon-Public-Documentation"
+    },
+    {
+      "path": "SECURITY.md",
+      "sha256": "8a512507d3ea20d64014b4cc18d8ae0ff3d8e4dd1bc20b99ee1f59b1451f0034",
+      "size": 2648,
+      "mode": "100644",
+      "source": "config/public-projections/scaffold/shared/SECURITY.md",
+      "license": "Pidgeon-Public-Documentation"
+    },
+    {
+      "path": "golden/tier-vocabulary.json",
+      "sha256": "44e818e45b47b5187c25abf2fe845bd23c45b03dcfc4090644e32396fb5c3ec1",
+      "size": 261,
+      "mode": "100644",
+      "source": "golden/tier-vocabulary.json",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "manifest.json",
+      "sha256": "8f00a5c6c57aeb1219b9ef836dbaa8ca6faa2e513485436b3a77d5ec52529c74",
+      "size": 50470,
+      "mode": "100644",
+      "source": "pidgeon-mcp/manifest.json",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "0e2e8b0b82599d2b7c18cdecc1baf9e1b7ca302e893c46a9e9f830c5afce4503",
+      "size": 55657,
+      "mode": "100644",
+      "source": "pidgeon-mcp/package-lock.json",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "package.json",
+      "sha256": "c57a662a232c72f3b73e6f8f588e1723ed984467fdc0fa26a14a31fd97fbe33b",
+      "size": 2621,
+      "mode": "100644",
+      "source": "config/public-projections/scaffold/mcp/package.json",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "scripts/build-manifest.ts",
+      "sha256": "cc75934c18ab728be9c3a2be9b17ac2ae4a325113b8c066d578d67f9a2c44501",
+      "size": 1167,
+      "mode": "100644",
+      "source": "pidgeon-mcp/scripts/build-manifest.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "scripts/manifest.ts",
+      "sha256": "9cde4d3da259c6aacebdb4ebd6e44c0140c0f2575961a0fd36b8f431b4dd662f",
+      "size": 18970,
+      "mode": "100644",
+      "source": "pidgeon-mcp/scripts/manifest.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/catalog.ts",
+      "sha256": "b250cd19e063dcd24ee6ebf100b46eace57d79b03ee2ee43868f5d83d457302e",
+      "size": 6231,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/catalog.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/community-catalog.ts",
+      "sha256": "6cd71cb90e8739d5f723d5b64a39e85720461147f5ebc71bc389ed67c071298b",
+      "size": 3069,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/community-catalog.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/composition.ts",
+      "sha256": "8ada8a7bc000595b7b3e1ad7120547ba102be8f93f03ec6f366e07996f967f25",
+      "size": 2083,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/composition.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/index.ts",
+      "sha256": "80eb86abc2fc20e3b41cb2ad13b58883e795f7c2a34009c945e8ad09c11a15fc",
+      "size": 3510,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/index.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/list-tools.ts",
+      "sha256": "1b28d996acfbf977aa1fddc29cad9c6c54f9ec3c3f56a8eed18b323b1775d0dd",
+      "size": 763,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/list-tools.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/prompts/catalog.ts",
+      "sha256": "33fad8d5ac60af9bf9857cfe9e59c5093e013c6590931728581001a8ec1c3dd5",
+      "size": 4130,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/prompts/catalog.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/prompts/debug.ts",
+      "sha256": "f7b3807e04b19cfe12d282654cdb60bce4a737b221647cea5f4c569eb93bd056",
+      "size": 3333,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/prompts/debug.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/prompts/go-live.ts",
+      "sha256": "b9423815fb3684911e957af9f2d2bbdf6ef36252094ed6289ed9cf8cff214452",
+      "size": 4830,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/prompts/go-live.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/prompts/onboard.ts",
+      "sha256": "568361fd1fceb7f28963fe790361bbad2bd892df7896f43aab3df2de69589fec",
+      "size": 3897,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/prompts/onboard.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/prompts/reproduce-and-fix.ts",
+      "sha256": "b2f1071f19601377e21d3713e700ae909cacd87d8c47b8a13faf3cf0e158df64",
+      "size": 3779,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/prompts/reproduce-and-fix.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/prompts/seed-validate-monitor.ts",
+      "sha256": "342d47c6d6893375a898908293b10d2a69dda14cbf2d0e5544a961761792e382",
+      "size": 3896,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/prompts/seed-validate-monitor.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/prompts/stand-up-interface.ts",
+      "sha256": "af914daf8d5ce33437a1340d648a4d00793737e85222359eabbfa0754ffae10c",
+      "size": 3949,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/prompts/stand-up-interface.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/resources/hl7-segments.ts",
+      "sha256": "b67e986e6b675309b58a852e35e77907326af9e946e55cba6a55c9c679939733",
+      "size": 15832,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/resources/hl7-segments.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/resources/provenance.ts",
+      "sha256": "b195106a903bc01e91b67a819375ea258c0e47c12fc5a7adb5ca6b4aa59558f6",
+      "size": 3243,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/resources/provenance.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/resources/session.ts",
+      "sha256": "0ee9f1dea664cd0c9ad222c1eb78c4424ee9e21a5b8389187b41265da456e336",
+      "size": 6648,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/resources/session.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/resources/setup-guide.ts",
+      "sha256": "bf8e86e393c5a4b93a58a36b15c78f4d6356e73dbc2cff00ad3b371c2420812c",
+      "size": 4822,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/resources/setup-guide.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/resources/system.ts",
+      "sha256": "33ae46fd95db77d718f21d4d4c639de40b03c7a127b7999c28025adea3989f50",
+      "size": 7132,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/resources/system.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/resources/vendors.ts",
+      "sha256": "28138c2054e9658c01bb1fee2de3c696c60e7915ba3d71e961d95a6b7ae29823",
+      "size": 4885,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/resources/vendors.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/server.ts",
+      "sha256": "773733e98d362feaf5acec4d1a7eaba7f8d46d3538e625ca49e47e6577811b88",
+      "size": 20364,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/server.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/tools/analyze-vendor.ts",
+      "sha256": "36ddb6ef6d250dcf28158a5dd16727a6c434bd4c99ffd86dd00e644b0502379d",
+      "size": 3560,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/tools/analyze-vendor.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/tools/clinical-check.ts",
+      "sha256": "adaf433b037ae35e3c3bc813f806d183c07c10d286cb60ad51f6b98552c83a24",
+      "size": 2972,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/tools/clinical-check.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/tools/conform.ts",
+      "sha256": "01d6e5b53c6344e1301f21b5c31f17b78d8d4869058356ca267ce0908cc4d9af",
+      "size": 6699,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/tools/conform.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/tools/data-packages.ts",
+      "sha256": "92750000a01170256652de277382af509b0aa2191ad483ed9c7c060e7c794b12",
+      "size": 4196,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/tools/data-packages.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/tools/deidentify.ts",
+      "sha256": "7b41f9f82a520017d3592429e2519825311d0e0f6e489794acda65af3fe79e23",
+      "size": 2697,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/tools/deidentify.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/tools/describe-tool.ts",
+      "sha256": "67afff2e2feda3bd76328642a2d75af6c0cc85f6885e77f8e03623d754f57172",
+      "size": 6649,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/tools/describe-tool.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/tools/diff.ts",
+      "sha256": "4b5ecfa62da4fb6f3eeccf5d47d858b42ddb7b0f930b644ca28ad363c258fec1",
+      "size": 5079,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/tools/diff.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/tools/explain-error.ts",
+      "sha256": "df71cce23df84a5eb8c52a1bab71f754fc1b4405fb967cfb37a5948505423261",
+      "size": 16250,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/tools/explain-error.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/tools/explain.ts",
+      "sha256": "734f456d9372c05f27d4b31051dd0601eb0f244bc81ddefdd52a9cbb474a0e6b",
+      "size": 14231,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/tools/explain.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/tools/format.ts",
+      "sha256": "42e5609a1a7eec55f60421270e9d13dccd2870f26663eb239e28155214508100",
+      "size": 7946,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/tools/format.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/tools/generate-population.ts",
+      "sha256": "b9e0da4167e901df10c149ed200b872ccd8f854287e5f46a74f37be2767533ed",
+      "size": 5380,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/tools/generate-population.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/tools/generate.ts",
+      "sha256": "d7a160c1c96239566cd60ce7b328b7532cc898fecdc9e0d39f6a795dcfbc626d",
+      "size": 6127,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/tools/generate.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/tools/loft-status.ts",
+      "sha256": "c79802384f9d4fcabca5c3beebf58f797d773f45e44b330360fda961775ad4ce",
+      "size": 4866,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/tools/loft-status.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/tools/lookup.ts",
+      "sha256": "e4cab474ac97546433b282fcd35939eda1870ea6160b6d8431ecdbb6c45a3f7b",
+      "size": 11176,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/tools/lookup.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/tools/population-status.ts",
+      "sha256": "5235c157cffff26addd6d80d7a4186b0f54e9c103ae0be96753c1baf3d87172d",
+      "size": 4513,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/tools/population-status.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/tools/refine_hl7_segment.ts",
+      "sha256": "f8fe5a17c60f8daa9088a00726de9c77af4afdd24e1696468bc6ab31aa364172",
+      "size": 3994,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/tools/refine_hl7_segment.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/tools/registration.ts",
+      "sha256": "1a993aedc38344be22f4b5082cbdf8a2b0b81b5eba786ad1f3a8500b6d7f1e7d",
+      "size": 12456,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/tools/registration.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/tools/search-artifacts.ts",
+      "sha256": "81b8debbca9641c713dec286320116926410c60f4bb739a18c466badd898c15f",
+      "size": 5258,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/tools/search-artifacts.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/tools/segment-spec.ts",
+      "sha256": "402616fa2848ea2fef896ef6a8cb88e5a0ab60d54c3f7fe386ed468beb7ce7c4",
+      "size": 20264,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/tools/segment-spec.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/tools/semantic-review.ts",
+      "sha256": "304d266a2d3f326d4075d29c756429362e8923cca954578234fcc7d6f9abbbb2",
+      "size": 4648,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/tools/semantic-review.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/tools/send.ts",
+      "sha256": "cd5c690321886bcf35bdc2e8c8d1fc5b9de7f9049d4fd2dafedb29cf38b99897",
+      "size": 3424,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/tools/send.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/tools/status.ts",
+      "sha256": "8a2f8275ef5f30e2cb68e3c679d3212d7a323bbb4b4d8266dac4fed7c2850ed8",
+      "size": 8352,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/tools/status.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/tools/types.ts",
+      "sha256": "5fd23b1986c7211bccdc37b07ef19fe44ce6316bfcb16d50debbee595da39b94",
+      "size": 3105,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/tools/types.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/tools/usage-instrumentation.ts",
+      "sha256": "122e0a8af707b3da03752a5d30e4624ff23abfcf0c5f91f39a350b0b56b7f694",
+      "size": 5706,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/tools/usage-instrumentation.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/tools/validate.ts",
+      "sha256": "b88557fc0090f267664b7e27a41edcfdd51f31887851075e89726eea8bfbdc78",
+      "size": 5746,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/tools/validate.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/tools/workflow.ts",
+      "sha256": "6d4928acca373a897581a95116e24a1305b9283cfa38d1c1b10651845aba73d8",
+      "size": 3780,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/tools/workflow.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/transport/bridge-session.ts",
+      "sha256": "60d3bdb51c49854485b7a8b7b6d952e266d58fd6ae152ece03223b455f0127b8",
+      "size": 4510,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/transport/bridge-session.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/transport/bridge.ts",
+      "sha256": "fa766548500f991189cdbc5967957015f5d380c16bc1a060a53bade0640abda2",
+      "size": 23161,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/transport/bridge.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/transport/cli.ts",
+      "sha256": "7c79462fc6979ccb36dded4092f1ff7c72a486401c57971d2e7d0f7b9cd0c318",
+      "size": 23742,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/transport/cli.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/transport/conform-normalize.ts",
+      "sha256": "be1bce75cc8fc79fe9f606b36766bbde76edfb528eb300813be764f2931fa91c",
+      "size": 4296,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/transport/conform-normalize.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/transport/errors.ts",
+      "sha256": "4a36dd60ccee953315d53947bc1b318fc525f606716aa207357ba171a3e936dd",
+      "size": 1655,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/transport/errors.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/transport/generate-types.ts",
+      "sha256": "9ac688eaef501175d0cec68faf2a56f585f9c3b3cf5a4ba382a6345baa7edb4c",
+      "size": 1031,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/transport/generate-types.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/transport/index.ts",
+      "sha256": "36f176dda37f14fe37da1743dff6c48ab8c6f5113a6541e64117b4edb16f12d9",
+      "size": 2496,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/transport/index.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/transport/reference-types.ts",
+      "sha256": "dcaf2deb768a56f49f3fa8ed8721be925d54b0c802b08796ee29e510eb06a452",
+      "size": 1045,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/transport/reference-types.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/transport/semantic.ts",
+      "sha256": "5ab269b7c299af997c477cb7af8e432acf2ceb28e28a6a23f9c5e49349b47075",
+      "size": 1874,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/transport/semantic.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/transport/types.ts",
+      "sha256": "a2188f6d2c2428f90900a6b595e58df6287a5f7dfe8089c1c5717f2ba17f4f6f",
+      "size": 15621,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/transport/types.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/transport/usage-types.ts",
+      "sha256": "b389a206ac8b7513e75c99fc10852317a7862ac834ecf68cf620ad718835842c",
+      "size": 1140,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/transport/usage-types.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/transport/wire-normalize.ts",
+      "sha256": "35af00b7d880abacdaaa9984a37f68d0ed2680c2c43aad74e498e4c22f836482",
+      "size": 10417,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/transport/wire-normalize.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/transport/wire.ts",
+      "sha256": "1a3d2ba23f26ef147bbea483f57724af9221b8bad94fa9e6f8941ab927c3a67b",
+      "size": 7152,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/transport/wire.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "src/version.ts",
+      "sha256": "91229b8ea1a3e57fe28d337fa213af7ce07c54d774b844123c0d815643e17c7b",
+      "size": 1024,
+      "mode": "100644",
+      "source": "pidgeon-mcp/src/version.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "test/bridge-error.test.ts",
+      "sha256": "53d723442e7258c671f8336b78bc547bf375d0088a485e0c81177b8dbec97eea",
+      "size": 5903,
+      "mode": "100644",
+      "source": "pidgeon-mcp/test/bridge-error.test.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "test/bridge-wire.test.ts",
+      "sha256": "165d106e7984dd6096964da128d3e2cb741517321636a8a5c04cbecb0380bda7",
+      "size": 8421,
+      "mode": "100644",
+      "source": "pidgeon-mcp/test/bridge-wire.test.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "test/cli-args.test.ts",
+      "sha256": "3b5df4ab47dbaafec33f906a85d8bf84d3b246a8a60ec6f1618ca0f3ea7d794a",
+      "size": 15291,
+      "mode": "100644",
+      "source": "pidgeon-mcp/test/cli-args.test.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "test/cli-e2e.test.ts",
+      "sha256": "bb2c039caf38aedd4f93a562b4996abe1459090815e813c24dc1d1d6f021934d",
+      "size": 5262,
+      "mode": "100644",
+      "source": "pidgeon-mcp/test/cli-e2e.test.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "test/composition.test.ts",
+      "sha256": "6aaabe028b7d61731b0c6649e87b9a584a5b7b44001c74664cb623636c6642d2",
+      "size": 11477,
+      "mode": "100644",
+      "source": "pidgeon-mcp/test/composition.test.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "test/containment-guard.test.ts",
+      "sha256": "85545df9b841cabfb8c109912b5b06eaa516098f10d2f50cdbeb74f3441113c2",
+      "size": 6618,
+      "mode": "100644",
+      "source": "pidgeon-mcp/test/containment-guard.test.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "test/cross-app-journey.test.ts",
+      "sha256": "50214404adb5e451fc6f654d2588f19c3de0af6127ad2ad122d095c8bf0b590a",
+      "size": 16631,
+      "mode": "100644",
+      "source": "pidgeon-mcp/test/cross-app-journey.test.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "test/describe-tool.test.ts",
+      "sha256": "13fc17c7aeb749074a424267f2e16b43527eb5634e77db5610f5f4c9299b0206",
+      "size": 7572,
+      "mode": "100644",
+      "source": "pidgeon-mcp/test/describe-tool.test.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "test/explain-error.test.ts",
+      "sha256": "46f8e77bef2da5175d3a07ff2827b60753d688588882164c279c3484302a0371",
+      "size": 6078,
+      "mode": "100644",
+      "source": "pidgeon-mcp/test/explain-error.test.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "test/format.test.ts",
+      "sha256": "4c5c3ca986eb9be52eb7ab859cc84c9cc78b6a64d3ffd9306fc4bc231e9a72af",
+      "size": 11058,
+      "mode": "100644",
+      "source": "pidgeon-mcp/test/format.test.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "test/golden-journey.test.ts",
+      "sha256": "3400f6d2750f0bbec6ab3f5a09f310f82b23d3e504abad66ccfcd7675b42ef5c",
+      "size": 6906,
+      "mode": "100644",
+      "source": "pidgeon-mcp/test/golden-journey.test.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "test/list-changed.test.ts",
+      "sha256": "5fad44653b0d0dd36acc2b1c7a339124c03fdb31701414c5d7ba5d84c0e8254f",
+      "size": 6468,
+      "mode": "100644",
+      "source": "pidgeon-mcp/test/list-changed.test.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "test/list-tools.test.ts",
+      "sha256": "8c28b17a980f72f7d79c5809bb1cfd9586cc50e9132360525d79305930732a5d",
+      "size": 980,
+      "mode": "100644",
+      "source": "pidgeon-mcp/test/list-tools.test.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "test/manifest.test.ts",
+      "sha256": "933389cd3c67f34aec64b395b8931c5e8c1c56d102452dca23e8f5c6436eb543",
+      "size": 15562,
+      "mode": "100644",
+      "source": "pidgeon-mcp/test/manifest.test.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "test/no-derived-memory.test.ts",
+      "sha256": "6db7abe4e90960aa3be39872f977afc2afb2f20120c331bc2146aa900af87110",
+      "size": 5955,
+      "mode": "100644",
+      "source": "pidgeon-mcp/test/no-derived-memory.test.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "test/reference-lookup.test.ts",
+      "sha256": "9113bf97d923ef3e1c521994a3ad64753cfeac10d935391cf5739dde7cadf302",
+      "size": 5089,
+      "mode": "100644",
+      "source": "pidgeon-mcp/test/reference-lookup.test.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "test/smoke.ts",
+      "sha256": "9867569c05d52853f1965b2a527cc9d9331b10e5c88214b2adb38f042d170709",
+      "size": 40573,
+      "mode": "100644",
+      "source": "pidgeon-mcp/test/smoke.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "test/tier-cache.test.ts",
+      "sha256": "0e188c3cc5601d80d07fb37b25746884872a981e69d207dc2d4509a178372fe7",
+      "size": 4932,
+      "mode": "100644",
+      "source": "pidgeon-mcp/test/tier-cache.test.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "test/toolset-filter.test.ts",
+      "sha256": "c4eec498f73a9b854d5c97a13bb70f122945b1decfc50db2f07d6faa1fc8483a",
+      "size": 6083,
+      "mode": "100644",
+      "source": "pidgeon-mcp/test/toolset-filter.test.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "test/usage-instrumentation.test.ts",
+      "sha256": "a7db9ebb0f40243e4e3282c3ce554c63d0f2f2fa8f406b966ffe0a21233412f0",
+      "size": 7775,
+      "mode": "100644",
+      "source": "pidgeon-mcp/test/usage-instrumentation.test.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "test/wire-shapes.test.ts",
+      "sha256": "025a53455653785f190eb23d414437fc3b62e70a7c7b33f3311ac0c9fdaa0373",
+      "size": 15113,
+      "mode": "100644",
+      "source": "pidgeon-mcp/test/wire-shapes.test.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "test/workspace-facts.test.ts",
+      "sha256": "e442f89d3e58fb3540ca08de39b280c8e721574bc223aba125123dab251275b1",
+      "size": 8451,
+      "mode": "100644",
+      "source": "pidgeon-mcp/test/workspace-facts.test.ts",
+      "license": "MPL-2.0"
+    },
+    {
+      "path": "tsconfig.json",
+      "sha256": "55b265ea0bc9101064b2e50c8589a09abe9dd10ea2c10144743818a0d9a3baba",
+      "size": 547,
+      "mode": "100644",
+      "source": "pidgeon-mcp/tsconfig.json",
+      "license": "MPL-2.0"
+    }
+  ]
+}

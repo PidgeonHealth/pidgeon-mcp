@@ -1,0 +1,93 @@
+# One-run D4 npm bootstrap. npm cannot enroll a package in Trusted Publishing until the package
+# exists, so this workflow accepts a short-lived publish-only NPM_TOKEN_BOOTSTRAP secret exactly
+# once. Delete the environment secret and revoke the token immediately after verification, then
+# enroll release.yml in npm Trusted Publishing for all later versions.
+
+name: bootstrap
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type "bootstrap-mcp" to allow the one-run first publication.'
+        type: string
+        required: false
+      dry_run:
+        description: 'Verify the sealed candidate without publishing.'
+        type: boolean
+        default: true
+      candidate_run_id:
+        description: 'Successful release.yml dry-run containing the approved MCP candidate.'
+        type: string
+        required: true
+      package_sha256:
+        description: 'Approved npm tarball SHA-256.'
+        type: string
+        required: true
+
+permissions:
+  actions: read
+  contents: write
+  id-token: write
+
+jobs:
+  publish:
+    if: ${{ inputs.dry_run == false }}
+    runs-on: ubuntu-latest
+    environment: mcp-package
+    timeout-minutes: 20
+    steps:
+      - name: Validate bootstrap intent
+        env:
+          CONFIRM: ${{ inputs.confirm }}
+          CANDIDATE_RUN_ID: ${{ inputs.candidate_run_id }}
+          APPROVED_PACKAGE_SHA256: ${{ inputs.package_sha256 }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          [[ "$CONFIRM" == "bootstrap-mcp" ]] || { echo '::error::confirm=bootstrap-mcp is required'; exit 1; }
+          [[ "$GITHUB_REF_TYPE" == "tag" && "$GITHUB_REF_NAME" == "v0.1.0-beta.1" ]] || {
+            echo '::error::Bootstrap requires protected v0.1.0-beta.1.'; exit 1;
+          }
+          [[ "$CANDIDATE_RUN_ID" =~ ^[0-9]+$ && "$APPROVED_PACKAGE_SHA256" =~ ^[0-9a-f]{64}$ ]] || {
+            echo '::error::Candidate run and package hash are required.'; exit 1;
+          }
+          run_json="$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$CANDIDATE_RUN_ID")"
+          [[ "$(jq -r '.path' <<<"$run_json")" == ".github/workflows/release.yml" &&
+             "$(jq -r '.conclusion' <<<"$run_json")" == "success" &&
+             "$(jq -r '.head_sha' <<<"$run_json")" == "$GITHUB_SHA" &&
+             "$(jq -r '.head_branch' <<<"$run_json")" == "$GITHUB_REF_NAME" ]] || {
+            echo '::error::Candidate run is not the successful exact release dry run.'; exit 1;
+          }
+
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.0
+        with:
+          name: pidgeon-mcp-candidate-${{ inputs.candidate_run_id }}
+          path: artifacts/candidate
+          github-token: ${{ github.token }}
+          run-id: ${{ inputs.candidate_run_id }}
+
+      - name: Verify and publish the one approved bootstrap candidate
+        env:
+          NPM_TOKEN_BOOTSTRAP: ${{ secrets.NPM_TOKEN_BOOTSTRAP }}
+          APPROVED_PACKAGE_SHA256: ${{ inputs.package_sha256 }}
+        run: |
+          set -euo pipefail
+          package="artifacts/candidate/packages/$(jq -r '.package.tarball' artifacts/candidate/candidate.json)"
+          test "$(sha256sum "$package" | awk '{print $1}')" = "$APPROVED_PACKAGE_SHA256"
+          test -n "$NPM_TOKEN_BOOTSTRAP"
+          printf '%s\n' "//registry.npmjs.org/:_authToken=$NPM_TOKEN_BOOTSTRAP" > "$RUNNER_TEMP/.npmrc"
+          NPM_CONFIG_USERCONFIG="$RUNNER_TEMP/.npmrc" npm publish "$package" --tag beta --access public --provenance --ignore-scripts
+
+      - name: Create immutable GitHub Release evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          package="artifacts/candidate/packages/$(jq -r '.package.tarball' artifacts/candidate/candidate.json)"
+          sha256sum "$package" artifacts/candidate/sbom/manifest.spdx.json > artifacts/candidate/SHA256SUMS
+          gh release create "$GITHUB_REF_NAME" \
+            "$package" artifacts/candidate/sbom/manifest.spdx.json \
+            artifacts/candidate/candidate.json artifacts/candidate/SHA256SUMS \
+            --repo "$GITHUB_REPOSITORY" --verify-tag --prerelease \
+            --title "@pidgeonhealth/pidgeon-mcp $GITHUB_REF_NAME" \
+            --notes "First-publication bootstrap evidence for $GITHUB_REF_NAME."

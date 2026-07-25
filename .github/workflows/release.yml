@@ -1,0 +1,253 @@
+# Protected release for PidgeonHealth/pidgeon-mcp: stages one exact npm candidate and publishes
+# it through npm Trusted Publishing (D4, release policy sections 6-7). The first beta publication
+# uses bootstrap.yml because npm cannot enroll a package in Trusted Publishing before it exists.
+
+name: release
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type "publish-mcp" to allow a real Trusted Publishing release.'
+        type: string
+        required: false
+      dry_run:
+        description: 'Build, test, and seal one candidate; do not publish.'
+        type: boolean
+        default: true
+      candidate_run_id:
+        description: 'Successful dry-run run containing the approved MCP candidate.'
+        type: string
+        required: false
+      package_sha256:
+        description: 'Approved npm tarball SHA-256.'
+        type: string
+        required: false
+      sbom_sha256:
+        description: 'Approved normalized SPDX SBOM SHA-256.'
+        type: string
+        required: false
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate release intent
+        shell: bash
+        env:
+          CONFIRM: ${{ inputs.confirm }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          CANDIDATE_RUN_ID: ${{ inputs.candidate_run_id }}
+          PACKAGE_SHA256: ${{ inputs.package_sha256 }}
+          SBOM_SHA256: ${{ inputs.sbom_sha256 }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if [[ "$DRY_RUN" == "true" && "$GITHUB_REF_TYPE" == "branch" ]]; then
+            repo_json="$(gh api "repos/$GITHUB_REPOSITORY")"
+            default_branch="$(jq -r '.default_branch' <<<"$repo_json")"
+            [[ "$GITHUB_REF_NAME" == "$default_branch" ]] || {
+              echo '::error::An unpublished branch dry run must use the default branch.'; exit 1;
+            }
+            branch_sha="$(gh api "repos/$GITHUB_REPOSITORY/branches/$GITHUB_REF_NAME" --jq '.commit.sha')"
+            [[ "$branch_sha" == "$GITHUB_SHA" ]] || {
+              echo '::error::An unpublished dry run must use the exact default-branch head.'; exit 1;
+            }
+          else
+            [[ "$GITHUB_REF_TYPE" == "tag" && "$GITHUB_REF_NAME" == "v0.1.0-beta.1" ]] || {
+              echo '::error::Publication and tagged staging require protected v0.1.0-beta.1.'; exit 1;
+            }
+            ref_json="$(gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$GITHUB_REF_NAME")"
+            [[ "$(jq -r '.object.type' <<<"$ref_json")" == "tag" ]] || {
+              echo '::error::The release ref must be an annotated signed tag, not a lightweight tag.'; exit 1;
+            }
+            tag_sha="$(jq -r '.object.sha' <<<"$ref_json")"
+            tag_json="$(gh api "repos/$GITHUB_REPOSITORY/git/tags/$tag_sha")"
+            [[ "$(jq -r '.verification.verified' <<<"$tag_json")" == "true" ]] || {
+              echo '::error::The release tag must be GitHub-verified.'; exit 1;
+            }
+            [[ "$(jq -r '.object.sha' <<<"$tag_json")" == "$GITHUB_SHA" ]] || {
+              echo '::error::The verified tag must point directly at the workflow commit.'; exit 1;
+            }
+          fi
+
+          if [[ "$DRY_RUN" == "false" ]]; then
+            [[ "$CONFIRM" == "publish-mcp" ]] || {
+              echo '::error::A real publish requires confirm=publish-mcp.'; exit 1;
+            }
+            [[ "$CANDIDATE_RUN_ID" =~ ^[0-9]+$ ]] || {
+              echo '::error::A real publish requires a numeric candidate_run_id.'; exit 1;
+            }
+            for value in "$PACKAGE_SHA256" "$SBOM_SHA256"; do
+              [[ "$value" =~ ^[0-9a-f]{64}$ ]] || {
+                echo '::error::Every approved candidate hash must be 64 lowercase hex characters.'; exit 1;
+              }
+            done
+            run_json="$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$CANDIDATE_RUN_ID")"
+            [[ "$(jq -r '.path' <<<"$run_json")" == ".github/workflows/release.yml" &&
+               "$(jq -r '.event' <<<"$run_json")" == "workflow_dispatch" &&
+               "$(jq -r '.conclusion' <<<"$run_json")" == "success" &&
+               "$(jq -r '.head_sha' <<<"$run_json")" == "$GITHUB_SHA" &&
+               "$(jq -r '.head_branch' <<<"$run_json")" == "$GITHUB_REF_NAME" ]] || {
+              echo '::error::candidate_run_id is not the successful candidate for this exact tag.'; exit 1;
+            }
+          fi
+          echo "Release preflight accepted (dry_run=$DRY_RUN)."
+
+  stage-candidate:
+    needs: preflight
+    if: ${{ inputs.dry_run }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          package-manager-cache: false
+
+      - name: Pin the reviewed npm CLI
+        run: |
+          npm install --global npm@11.18.0 --ignore-scripts
+          test "$(npm --version)" = "11.18.0"
+
+      - name: Install
+        run: npm ci
+
+      - name: Build and test
+        run: |
+          npm run build --if-present
+          npm test
+          npm run test:catalog-parity --if-present
+
+      - name: Pack one unsigned MCP candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/candidate/packages artifacts/candidate/sbom
+          npm pack --pack-destination artifacts/candidate/packages --json > artifacts/candidate/pack.json
+          test "$(find artifacts/candidate/packages -maxdepth 1 -name '*.tgz' | wc -l)" -eq 1
+          tarball="$(jq -r '.[0].filename' artifacts/candidate/pack.json)"
+          test -f "artifacts/candidate/packages/$tarball"
+          sha256sum "artifacts/candidate/packages/$tarball" | awk '{print $1}' > artifacts/candidate/package.sha256
+
+      - name: Generate normalized SPDX SBOM
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm sbom --sbom-format=spdx --sbom-type=library > artifacts/candidate/sbom/raw.spdx.json
+          jq --sort-keys \
+            'del(.creationInfo.created) |
+             .documentNamespace |= sub("-[0-9a-f-]{36}$"; "-normalized") |
+             .creationInfo.creators |= sort' \
+            artifacts/candidate/sbom/raw.spdx.json > artifacts/candidate/sbom/manifest.spdx.json
+          sha256sum artifacts/candidate/sbom/manifest.spdx.json | awk '{print $1}' > artifacts/candidate/sbom.sha256
+
+      - name: Seal candidate manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          tarball="$(jq -r '.[0].filename' artifacts/candidate/pack.json)"
+          jq -n \
+            --arg repository "$GITHUB_REPOSITORY" \
+            --arg commit "$GITHUB_SHA" \
+            --arg tag "$GITHUB_REF_NAME" \
+            --argjson run_id "$GITHUB_RUN_ID" \
+            --arg tarball "$tarball" \
+            --arg package_sha256 "$(cat artifacts/candidate/package.sha256)" \
+            --arg sbom_sha256 "$(cat artifacts/candidate/sbom.sha256)" \
+            '{schema: 1, surface: "mcp", repository: $repository, commit: $commit, tag: $tag,
+              run_id: $run_id, version: "0.1.0-beta.1",
+              package: {name: "@pidgeonhealth/pidgeon-mcp", tarball: $tarball, sha256: $package_sha256},
+              sbom_sha256: $sbom_sha256}' > artifacts/candidate/candidate.json
+          jq . artifacts/candidate/candidate.json
+
+      - name: Upload sealed MCP candidate
+        uses: actions/upload-artifact@043fb1d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: pidgeon-mcp-candidate-${{ github.run_id }}
+          path: artifacts/candidate
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Dry-run summary
+        run: |
+          echo 'Dry run: one MCP tarball and normalized SPDX SBOM were sealed and left unpublished.' | tee -a "$GITHUB_STEP_SUMMARY"
+          jq . artifacts/candidate/candidate.json | tee -a "$GITHUB_STEP_SUMMARY"
+
+  publish:
+    needs: preflight
+    if: ${{ inputs.dry_run == false }}
+    runs-on: ubuntu-latest
+    environment: mcp-package
+    permissions:
+      actions: read
+      contents: write
+      id-token: write
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
+
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.0
+        with:
+          name: pidgeon-mcp-candidate-${{ inputs.candidate_run_id }}
+          path: artifacts/candidate
+          github-token: ${{ github.token }}
+          run-id: ${{ inputs.candidate_run_id }}
+
+      - name: Verify the approved candidate
+        shell: bash
+        env:
+          APPROVED_PACKAGE_SHA256: ${{ inputs.package_sha256 }}
+          APPROVED_SBOM_SHA256: ${{ inputs.sbom_sha256 }}
+          CANDIDATE_RUN_ID: ${{ inputs.candidate_run_id }}
+        run: |
+          set -euo pipefail
+          candidate='artifacts/candidate/candidate.json'
+          test "$(jq -r '.repository' "$candidate")" = "$GITHUB_REPOSITORY"
+          test "$(jq -r '.commit' "$candidate")" = "$GITHUB_SHA"
+          test "$(jq -r '.tag' "$candidate")" = "$GITHUB_REF_NAME"
+          test "$(jq -r '.run_id' "$candidate")" = "$CANDIDATE_RUN_ID"
+          package="artifacts/candidate/packages/$(jq -r '.package.tarball' "$candidate")"
+          test "$(sha256sum "$package" | awk '{print $1}')" = "$APPROVED_PACKAGE_SHA256"
+          test "$(sha256sum artifacts/candidate/sbom/manifest.spdx.json | awk '{print $1}')" = "$APPROVED_SBOM_SHA256"
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+
+      - name: Pin the reviewed npm CLI
+        run: |
+          npm install --global npm@11.18.0 --ignore-scripts
+          test "$(npm --version)" = "11.18.0"
+
+      - name: Publish the sealed tarball through Trusted Publishing
+        env:
+          NPM_CONFIG_PROVENANCE: true
+        run: |
+          package="artifacts/candidate/packages/$(jq -r '.package.tarball' artifacts/candidate/candidate.json)"
+          npm publish "$package" --tag beta --access public --provenance --ignore-scripts
+
+      - name: Create immutable GitHub Release evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          package="artifacts/candidate/packages/$(jq -r '.package.tarball' artifacts/candidate/candidate.json)"
+          sha256sum "$package" artifacts/candidate/sbom/manifest.spdx.json > artifacts/candidate/SHA256SUMS
+          gh release create "$GITHUB_REF_NAME" \
+            "$package" artifacts/candidate/sbom/manifest.spdx.json \
+            artifacts/candidate/candidate.json artifacts/candidate/SHA256SUMS \
+            --repo "$GITHUB_REPOSITORY" --verify-tag --prerelease \
+            --title "@pidgeonhealth/pidgeon-mcp $GITHUB_REF_NAME" \
+            --notes "Exact npm candidate and normalized SPDX evidence for $GITHUB_REF_NAME."
